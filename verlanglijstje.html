@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Mijn verlanglijstje</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&display=swap" rel="stylesheet">
+<style>
+:root {
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  --bg: #f4f7f5; --surface: #ffffff; --ink: #14201c; --muted: #5b6b65; --line: #d6e0db;
+  --pine: #1f3a33; --pine-ink: #ffffff; --berry: #b3263e; --berry-ink: #ffffff;
+  --gold: #c9a24b; --ok-bg: #e3f3ea; --err-bg: #fbe6ea;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1a17; --surface: #172622; --ink: #e8f0ec; --muted: #9bb0a8; --line: #2a3d37;
+    --pine: #8fc4b0; --pine-ink: #0f1a17; --berry: #e0566d; --berry-ink: #14201c;
+    --gold: #d9b862; --ok-bg: #1b3a2d; --err-bg: #3d1d25;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1a17; --surface: #172622; --ink: #e8f0ec; --muted: #9bb0a8; --line: #2a3d37;
+  --pine: #8fc4b0; --pine-ink: #0f1a17; --berry: #e0566d; --berry-ink: #14201c;
+  --gold: #d9b862; --ok-bg: #1b3a2d; --err-bg: #3d1d25;
+  color-scheme: dark;
+}
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+.wrap { max-width: 640px; margin: 0 auto; padding: 20px 16px 64px; }
+h1 { font-family: "Fraunces", Georgia, "Times New Roman", serif; font-weight: 800; font-size: clamp(2rem, 8vw, 2.6rem); line-height: 1.05; margin: 12px 0 8px; }
+h1 span { color: var(--berry); }
+h2 { font-family: "Fraunces", Georgia, serif; font-size: 1.25rem; margin: 0 0 4px; }
+.lead, .hint { color: var(--muted); margin: 0; }
+.hint { font-size: .9rem; margin-bottom: 12px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 18px; margin-top: 16px; }
+.card.ribbon { border-top: 4px solid var(--berry); }
+label { display: block; font-weight: 600; font-size: .9rem; margin: 12px 0 4px; }
+input[type="text"], textarea {
+  width: 100%; font: inherit; color: var(--ink); background: var(--bg);
+  border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; min-height: 44px;
+}
+textarea { min-height: 72px; resize: vertical; }
+input:focus-visible, textarea:focus-visible, button:focus-visible, a:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+button, .btn {
+  font: inherit; font-weight: 600; border: 0; border-radius: 10px; padding: 10px 16px; min-height: 48px;
+  cursor: pointer; background: var(--berry); color: var(--berry-ink); text-decoration: none;
+  display: inline-flex; align-items: center; justify-content: center; width: 100%; margin-top: 16px;
+}
+.btn.ghost { background: transparent; color: var(--ink); border: 1px solid var(--line); margin-top: 10px; }
+button:disabled { opacity: .5; cursor: not-allowed; }
+.msg { border-radius: 10px; padding: 10px 12px; margin-top: 14px; font-size: .95rem; }
+.msg.err { background: var(--err-bg); }
+.msg.ok { background: var(--ok-bg); }
+.msg a { color: inherit; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Mijn <span>verlanglijstje</span></h1>
+    <p class="lead">Zet tot 5 dingen op je lijstje. Iedereen kan het daarna terugvinden in het overzicht.</p>
+  </header>
+
+  <section class="card ribbon" aria-labelledby="h-list">
+    <h2 id="h-list">Jouw lijstje</h2>
+    <p class="hint">Alleen je naam en de eerste wens zijn verplicht. Een link naar een webshop mag ook. Vul je dezelfde naam later opnieuw in, dan wordt je lijstje aangepast.</p>
+
+    <label for="name">Jouw naam</label>
+    <input id="name" type="text" autocomplete="given-name" maxlength="40" placeholder="Bijvoorbeeld Lies">
+
+    <label for="w1">Wens 1</label>
+    <input id="w1" class="wish" type="text" maxlength="140" placeholder="Bijvoorbeeld een warme sjaal">
+    <label for="w2">Wens 2</label>
+    <input id="w2" class="wish" type="text" maxlength="140">
+    <label for="w3">Wens 3</label>
+    <input id="w3" class="wish" type="text" maxlength="140">
+    <label for="w4">Wens 4</label>
+    <input id="w4" class="wish" type="text" maxlength="140">
+    <label for="w5">Wens 5</label>
+    <input id="w5" class="wish" type="text" maxlength="140">
+
+    <label for="note">Handig om te weten (optioneel)</label>
+    <textarea id="note" maxlength="200" placeholder="Maat, kleur, allergieën, dingen die ik al heb"></textarea>
+
+    <button id="save" type="button">Lijstje opslaan</button>
+    <div id="status" role="status" aria-live="polite"></div>
+    <a class="btn ghost" href="overzicht.html">Bekijk het overzicht van iedereen</a>
+  </section>
+</div>
+
+<script src="config.js"></script>
+<script>
+(function () {
+  function $(id) { return document.getElementById(id); }
+  var CFG = window.SANTA_CONFIG || {};
+  var ready = !!(CFG.SUPABASE_URL && CFG.SUPABASE_KEY &&
+    CFG.SUPABASE_URL.indexOf("JOUW") === -1 && CFG.SUPABASE_KEY.indexOf("JOUW") === -1);
+  var wishes = Array.prototype.slice.call(document.querySelectorAll(".wish"));
+
+  function endpoint() { return CFG.SUPABASE_URL.replace(/\/+$/, "") + "/rest/v1/wishes"; }
+  function headers(extra) {
+    var h = { "apikey": CFG.SUPABASE_KEY, "Content-Type": "application/json" };
+    if (CFG.SUPABASE_KEY.indexOf("eyJ") === 0) h["Authorization"] = "Bearer " + CFG.SUPABASE_KEY;
+    for (var k in (extra || {})) h[k] = extra[k];
+    return h;
+  }
+  function nameKey(n) { return n.trim().replace(/\s+/g, " ").toLowerCase(); }
+
+  function show(text, kind, html) {
+    var box = $("status");
+    box.innerHTML = "";
+    if (!text) return;
+    var d = document.createElement("div");
+    d.className = "msg " + kind;
+    d.textContent = text;
+    if (html) {
+      var a = document.createElement("a");
+      a.href = "overzicht.html"; a.textContent = "Bekijk het overzicht";
+      d.appendChild(document.createTextNode(" "));
+      d.appendChild(a);
+    }
+    box.appendChild(d);
+  }
+
+  if (!ready) {
+    show("De pagina is nog niet gekoppeld aan een database. Vul de gegevens in het bestand config.js in.", "err");
+    $("save").disabled = true;
+  }
+
+  // Bestaand lijstje ophalen zodra je je naam invult
+  $("name").addEventListener("change", function () {
+    if (!ready) return;
+    var key = nameKey($("name").value);
+    var allEmpty = wishes.every(function (w) { return !w.value.trim(); }) && !$("note").value.trim();
+    if (!key || !allEmpty) return;
+    fetch(endpoint() + "?name_key=eq." + encodeURIComponent(key) + "&select=items,note", { headers: headers() })
+      .then(function (r) { return r.ok ? r.json() : []; })
+      .then(function (rows) {
+        if (!rows || !rows.length) return;
+        (rows[0].items || []).slice(0, 5).forEach(function (t, i) { wishes[i].value = t; });
+        $("note").value = rows[0].note || "";
+        show("Je bestaande lijstje is geladen. Pas het aan en sla het opnieuw op.", "ok");
+      })
+      .catch(function () {});
+  });
+
+  $("save").onclick = function () {
+    var name = $("name").value.trim().replace(/\s+/g, " ");
+    var items = wishes.map(function (w) { return w.value.trim(); }).filter(Boolean).slice(0, 5);
+    if (!name) { show("Vul je naam in.", "err"); $("name").focus(); return; }
+    if (!items.length) { show("Vul minstens één wens in.", "err"); wishes[0].focus(); return; }
+    var btn = $("save");
+    btn.disabled = true; btn.textContent = "Bezig met opslaan…";
+    fetch(endpoint() + "?on_conflict=name_key", {
+      method: "POST",
+      headers: headers({ "Prefer": "resolution=merge-duplicates,return=minimal" }),
+      body: JSON.stringify({
+        name_key: nameKey(name), name: name, items: items,
+        note: $("note").value.trim(), updated_at: new Date().toISOString()
+      })
+    }).then(function (r) {
+      if (!r.ok) return r.text().then(function (t) { throw new Error(t || ("Fout " + r.status)); });
+      show("Bedankt " + name + ", je lijstje is opgeslagen.", "ok", true);
+    }).catch(function (e) {
+      show("Opslaan is niet gelukt. Probeer het later opnieuw. (" + String(e.message).slice(0, 120) + ")", "err");
+    }).then(function () {
+      btn.disabled = false; btn.textContent = "Lijstje opslaan";
+    });
+  };
+})();
+</script>
+</body>
+</html>

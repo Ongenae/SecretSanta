@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Alle verlanglijstjes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&display=swap" rel="stylesheet">
+<style>
+:root {
+  box-sizing: border-box;
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  --bg: #f4f7f5; --surface: #ffffff; --ink: #14201c; --muted: #5b6b65; --line: #d6e0db;
+  --pine: #1f3a33; --pine-ink: #ffffff; --berry: #b3263e; --berry-ink: #ffffff;
+  --gold: #c9a24b; --err-bg: #fbe6ea;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1a17; --surface: #172622; --ink: #e8f0ec; --muted: #9bb0a8; --line: #2a3d37;
+    --pine: #8fc4b0; --pine-ink: #0f1a17; --berry: #e0566d; --berry-ink: #14201c;
+    --gold: #d9b862; --err-bg: #3d1d25;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1a17; --surface: #172622; --ink: #e8f0ec; --muted: #9bb0a8; --line: #2a3d37;
+  --pine: #8fc4b0; --pine-ink: #0f1a17; --berry: #e0566d; --berry-ink: #14201c;
+  --gold: #d9b862; --err-bg: #3d1d25;
+  color-scheme: dark;
+}
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+.wrap { max-width: 720px; margin: 0 auto; padding: 20px 16px 64px; }
+h1 { font-family: "Fraunces", Georgia, "Times New Roman", serif; font-weight: 800; font-size: clamp(2rem, 8vw, 2.6rem); line-height: 1.05; margin: 12px 0 8px; }
+h1 span { color: var(--berry); }
+.lead { color: var(--muted); margin: 0; }
+.tools { display: flex; gap: 8px; margin-top: 18px; flex-wrap: wrap; }
+.tools input {
+  flex: 1 1 200px; font: inherit; color: var(--ink); background: var(--surface);
+  border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; min-height: 44px;
+}
+button, .btn {
+  font: inherit; font-weight: 600; border-radius: 10px; padding: 10px 16px; min-height: 44px; cursor: pointer;
+  background: transparent; color: var(--ink); border: 1px solid var(--line); text-decoration: none;
+  display: inline-flex; align-items: center; justify-content: center;
+}
+.btn.primary { background: var(--berry); color: var(--berry-ink); border-color: var(--berry); }
+input:focus-visible, button:focus-visible, a:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.count { color: var(--muted); font-size: .9rem; margin: 14px 0 0; }
+.grid { display: grid; gap: 14px; margin-top: 12px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
+.person { background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--berry); border-radius: 14px; padding: 16px; }
+.person h2 { font-family: "Fraunces", Georgia, serif; font-size: 1.25rem; margin: 0 0 6px; overflow-wrap: anywhere; }
+.person ol { margin: 0; padding-left: 22px; }
+.person li { margin: 4px 0; overflow-wrap: anywhere; }
+.person a { color: var(--pine); font-weight: 600; }
+.note { margin: 10px 0 0; padding-top: 10px; border-top: 1px dashed var(--line); color: var(--muted); font-size: .92rem; overflow-wrap: anywhere; }
+.when { margin: 10px 0 0; font-size: .8rem; color: var(--muted); }
+.msg { border-radius: 10px; padding: 12px; margin-top: 16px; background: var(--surface); border: 1px solid var(--line); }
+.msg.err { background: var(--err-bg); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Alle <span>verlanglijstjes</span></h1>
+    <p class="lead">Hier vind je wat iedereen graag zou krijgen.</p>
+  </header>
+
+  <div class="tools">
+    <input id="q" type="search" placeholder="Zoek op naam" aria-label="Zoek op naam">
+    <button id="refresh" type="button">Vernieuwen</button>
+    <a class="btn primary" href="verlanglijstje.html">Mijn lijstje invullen</a>
+  </div>
+  <p class="count" id="count" aria-live="polite"></p>
+  <div id="status"></div>
+  <div class="grid" id="grid"></div>
+</div>
+
+<script src="config.js"></script>
+<script>
+(function () {
+  function $(id) { return document.getElementById(id); }
+  var CFG = window.SANTA_CONFIG || {};
+  var ready = !!(CFG.SUPABASE_URL && CFG.SUPABASE_KEY &&
+    CFG.SUPABASE_URL.indexOf("JOUW") === -1 && CFG.SUPABASE_KEY.indexOf("JOUW") === -1);
+  var rows = [];
+
+  function headers() {
+    var h = { "apikey": CFG.SUPABASE_KEY };
+    if (CFG.SUPABASE_KEY.indexOf("eyJ") === 0) h["Authorization"] = "Bearer " + CFG.SUPABASE_KEY;
+    return h;
+  }
+
+  function msg(text, err) {
+    var s = $("status");
+    s.innerHTML = "";
+    if (!text) return;
+    var d = document.createElement("div");
+    d.className = "msg" + (err ? " err" : "");
+    d.textContent = text;
+    s.appendChild(d);
+  }
+
+  function addText(parent, text) {
+    // Maak webadressen aanklikbaar zonder HTML in te voegen
+    var parts = String(text).split(/(https?:\/\/[^\s]+)/g);
+    parts.forEach(function (p) {
+      if (/^https?:\/\//.test(p)) {
+        var a = document.createElement("a");
+        a.href = p; a.target = "_blank"; a.rel = "noopener noreferrer"; a.textContent = p;
+        parent.appendChild(a);
+      } else if (p) {
+        parent.appendChild(document.createTextNode(p));
+      }
+    });
+  }
+
+  function render() {
+    var q = $("q").value.trim().toLowerCase();
+    var list = rows.filter(function (r) { return !q || String(r.name).toLowerCase().indexOf(q) !== -1; });
+    var grid = $("grid");
+    grid.innerHTML = "";
+    list.forEach(function (r) {
+      var card = document.createElement("article");
+      card.className = "person";
+      var h = document.createElement("h2"); h.textContent = r.name; card.appendChild(h);
+      var ol = document.createElement("ol");
+      (r.items || []).slice(0, 5).forEach(function (t) {
+        var li = document.createElement("li"); addText(li, t); ol.appendChild(li);
+      });
+      card.appendChild(ol);
+      if (r.note) {
+        var n = document.createElement("p"); n.className = "note";
+        n.appendChild(document.createTextNode("Handig om te weten: "));
+        addText(n, r.note); card.appendChild(n);
+      }
+      if (r.updated_at) {
+        var w = document.createElement("p"); w.className = "when";
+        try {
+          w.textContent = "Bijgewerkt op " + new Date(r.updated_at).toLocaleDateString("nl-BE", { day: "numeric", month: "long" });
+        } catch (e) {}
+        card.appendChild(w);
+      }
+      grid.appendChild(card);
+    });
+    $("count").textContent = rows.length
+      ? list.length + " van " + rows.length + (rows.length === 1 ? " lijstje" : " lijstjes")
+      : "";
+    if (!rows.length && ready && !$("status").firstChild) msg("Er zijn nog geen lijstjes. Wees de eerste en vul je lijstje in.", false);
+  }
+
+  function load() {
+    if (!ready) {
+      msg("De pagina is nog niet gekoppeld aan een database. Vul de gegevens in het bestand config.js in.", true);
+      return;
+    }
+    msg("Lijstjes laden…", false);
+    fetch(CFG.SUPABASE_URL.replace(/\/+$/, "") + "/rest/v1/wishes?select=name,items,note,updated_at&order=name.asc", { headers: headers() })
+      .then(function (r) {
+        if (!r.ok) throw new Error("Fout " + r.status);
+        return r.json();
+      })
+      .then(function (data) { rows = data || []; msg("", false); render(); })
+      .catch(function (e) { msg("De lijstjes konden niet geladen worden. Probeer het later opnieuw. (" + e.message + ")", true); });
+  }
+
+  $("q").addEventListener("input", render);
+  $("refresh").onclick = load;
+  load();
+})();
+</script>
+</body>
+</html>
