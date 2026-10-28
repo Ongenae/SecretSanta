@@ -3,76 +3,166 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Alle verlanglijstjes</title>
+<title>Alle lijstjes</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Nunito:wght@400;600;700;800&family=Roboto+Slab:wght@300&display=swap" rel="stylesheet">
 <style>
 :root {
-  box-sizing: border-box;
-  padding-top: env(safe-area-inset-top, 0px);
-  padding-bottom: env(safe-area-inset-bottom, 0px);
-  --bg: #f4f7f5; --surface: #ffffff; --ink: #14201c; --muted: #5b6b65; --line: #d6e0db;
-  --pine: #1f3a33; --pine-ink: #ffffff; --berry: #b3263e; --berry-ink: #ffffff;
-  --gold: #c9a24b; --err-bg: #fbe6ea;
-  color-scheme: light;
+  --red: #dc3035; --red-b: #ed4044; --red-tint: #fff3f3; --red-ink: #c4252a;
+  --blue: #2671b5; --blue-tint: #edf5ff; --blue-ink: #245fa6;
+  --ink: #2d2d2c; --body: #4a4a4a; --muted: #6b6b6b; --line: #e3ecf7; --field-line: #cfdcec;
+  --ok-bg: #e6f6ea; --err-bg: #fff3f3; --wa: #128a43; --focus: #2671b5; --gold: #f9a948;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --bg: #0f1a17; --surface: #172622; --ink: #e8f0ec; --muted: #9bb0a8; --line: #2a3d37;
-    --pine: #8fc4b0; --pine-ink: #0f1a17; --berry: #e0566d; --berry-ink: #14201c;
-    --gold: #d9b862; --err-bg: #3d1d25;
-    color-scheme: dark;
-  }
-}
-:root[data-theme="dark"] {
-  --bg: #0f1a17; --surface: #172622; --ink: #e8f0ec; --muted: #9bb0a8; --line: #2a3d37;
-  --pine: #8fc4b0; --pine-ink: #0f1a17; --berry: #e0566d; --berry-ink: #14201c;
-  --gold: #d9b862; --err-bg: #3d1d25;
-  color-scheme: dark;
-}
-html { scroll-padding-top: env(safe-area-inset-top, 0px); }
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-.wrap { max-width: 720px; margin: 0 auto; padding: 20px 16px 64px; }
-h1 { font-family: "Fraunces", Georgia, "Times New Roman", serif; font-weight: 800; font-size: clamp(2rem, 8vw, 2.6rem); line-height: 1.05; margin: 12px 0 8px; }
-h1 span { color: var(--berry); }
-.lead { color: var(--muted); margin: 0; }
-.tools { display: flex; gap: 8px; margin-top: 18px; flex-wrap: wrap; }
-.tools input {
-  flex: 1 1 200px; font: inherit; color: var(--ink); background: var(--surface);
-  border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; min-height: 44px;
+html { scroll-padding-top: env(safe-area-inset-top, 0px); }
+body {
+  margin: 0; min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column;
+  background: #fff; color: var(--body);
+  font: 400 16px/1.5 "Nunito", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+.hero {
+  position: relative; overflow: hidden;
+  background: linear-gradient(180deg, #5b9fdd 0%, #2d78bd 55%, #2671b5 100%);
+}
+.hero-top {
+  color: #fff; text-align: center;
+  padding: calc(env(safe-area-inset-top, 0px) + 26px) 16px 0;
+}
+h1 { margin: 0; line-height: 1; }
+.t-light {
+  display: block; font: 300 clamp(1.6rem, 7vw, 2.3rem)/1.1 "Roboto Slab", Georgia, serif; letter-spacing: .02em;
+  text-shadow: 0 1px 8px rgba(15, 60, 120, .55);
+}
+.t-heavy {
+  display: block; font: 400 clamp(2.1rem, 10.5vw, 3.4rem)/1.05 "Alfa Slab One", "Rockwell Extra Bold", Rockwell, Georgia, serif;
+  text-shadow: 0 3px 0 rgba(20, 70, 130, .6), 0 2px 12px rgba(15, 60, 120, .35); overflow-wrap: anywhere;
+}
+.t-heavy.long { font-size: clamp(1.7rem, 8.4vw, 2.8rem); }
+.scene { position: relative; max-width: 520px; margin: 0 auto; }
+.gifts { display: block; width: 100%; height: auto; }
+.snow { position: absolute; left: 50%; bottom: -1px; width: 100vw; height: 40px; transform: translateX(-50%); display: block; }
+.intro { color: var(--muted); margin: 6px 0 0; text-align: center; text-wrap: balance; }
+.wrap { flex: 1 0 auto; width: 100%; max-width: 640px; margin: 0 auto; padding: 0 16px 40px; }
+.card {
+  background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 18px; margin-top: 16px;
+  box-shadow: 0 2px 12px rgba(38, 113, 181, .07);
+}
+h2 { font: 800 1.15rem/1.25 "Nunito", system-ui, sans-serif; color: var(--ink); margin: 0 0 4px; }
+.hint { color: var(--muted); font-size: .9rem; margin: 0 0 12px; }
+label { display: block; font-weight: 700; font-size: .85rem; color: var(--body); margin: 14px 0 4px; }
+input, select, textarea {
+  width: 100%; font: inherit; color: var(--ink); background: #fff;
+  border: 1px solid var(--field-line); border-radius: 10px; padding: 10px 12px; min-height: 46px;
+}
+input::placeholder, textarea::placeholder { color: #8a94a0; }
+textarea { min-height: 72px; resize: vertical; }
+input:focus, select:focus, textarea:focus { border-color: var(--blue); }
+input:focus-visible, select:focus-visible, textarea:focus-visible, button:focus-visible, a:focus-visible, summary:focus-visible {
+  outline: 3px solid var(--focus); outline-offset: 2px;
 }
 button, .btn {
-  font: inherit; font-weight: 600; border-radius: 10px; padding: 10px 16px; min-height: 44px; cursor: pointer;
-  background: transparent; color: var(--ink); border: 1px solid var(--line); text-decoration: none;
-  display: inline-flex; align-items: center; justify-content: center;
+  font: inherit; font-weight: 800; border: 0; border-radius: 10px; padding: 10px 20px; min-height: 48px;
+  cursor: pointer; background: var(--red); color: #fff; text-decoration: none;
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
 }
-.btn.primary { background: var(--berry); color: var(--berry-ink); border-color: var(--berry); }
-input:focus-visible, button:focus-visible, a:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+.ghost { background: var(--blue-tint); color: var(--blue-ink); }
+.wa { background: var(--wa); color: #fff; }
+button:disabled { opacity: .5; cursor: not-allowed; }
+.band {
+  display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding: 10px 16px; font-size: .75rem; font-weight: 800; letter-spacing: .03em; text-transform: uppercase;
+}
+.card > .band { margin: 14px -18px 0; padding-left: 18px; padding-right: 18px; }
+.band.blue { background: var(--blue-tint); color: var(--blue-ink); }
+.band.red { background: var(--red-tint); color: var(--red-ink); }
+.msg { border-radius: 10px; padding: 10px 12px; margin-top: 14px; font-size: .95rem; background: var(--blue-tint); color: var(--ink); }
+.msg.err { background: var(--err-bg); }
+.msg.ok { background: var(--ok-bg); }
+.msg a { color: inherit; font-weight: 800; }
+.toast {
+  position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+  background: var(--ink); color: #fff; padding: 10px 16px; border-radius: 10px; z-index: 20;
+  opacity: 0; pointer-events: none; transition: opacity .2s;
+}
+.toast.show { opacity: 1; }
+@media (prefers-reduced-motion: reduce) { .toast { transition: none; } }
+
+.wrap { max-width: 720px; }
+.tools { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+.tools input { flex: 1 1 200px; }
 .count { color: var(--muted); font-size: .9rem; margin: 14px 0 0; }
 .grid { display: grid; gap: 14px; margin-top: 12px; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); }
-.person { background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--berry); border-radius: 14px; padding: 16px; }
-.person h2 { font-family: "Fraunces", Georgia, serif; font-size: 1.25rem; margin: 0 0 6px; overflow-wrap: anywhere; }
-.person ol { margin: 0; padding-left: 22px; }
+.person { background: #fff; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: 0 2px 12px rgba(38,113,181,.07); }
+.person h2 { font-size: 1.1rem; margin: 0; padding: 14px 16px 12px; overflow-wrap: anywhere; }
+.person ol { margin: 0; padding: 12px 16px 14px 38px; }
 .person li { margin: 4px 0; overflow-wrap: anywhere; }
-.person a { color: var(--pine); font-weight: 600; }
-.note { margin: 10px 0 0; padding-top: 10px; border-top: 1px dashed var(--line); color: var(--muted); font-size: .92rem; overflow-wrap: anywhere; }
-.when { margin: 10px 0 0; font-size: .8rem; color: var(--muted); }
-.msg { border-radius: 10px; padding: 12px; margin-top: 16px; background: var(--surface); border: 1px solid var(--line); }
-.msg.err { background: var(--err-bg); }
+.person a { color: var(--blue-ink); font-weight: 800; }
+.note { margin: 0; padding: 12px 16px 14px; border-top: 1px solid var(--line); color: var(--muted); font-size: .92rem; overflow-wrap: anywhere; }
 </style>
 </head>
 <body>
+<header class="hero">
+  <div class="hero-top">
+    <h1><span class="t-light">alle</span><span class="t-heavy">lijstjes</span></h1>
+  </div>
+  <div class="scene">
+    <svg class="gifts" viewBox="0 0 390 210" aria-hidden="true" focusable="false">
+      <g fill="#fff"><path transform="translate(30 34) scale(1)" opacity="0.85" d="M0-6L1.6-1.6 6 0 1.6 1.6 0 6-1.6 1.6-6 0-1.6-1.6Z"/><path transform="translate(118 20) scale(0.8)" opacity="0.85" d="M0-6L1.6-1.6 6 0 1.6 1.6 0 6-1.6 1.6-6 0-1.6-1.6Z"/><path transform="translate(252 24) scale(1)" opacity="0.85" d="M0-6L1.6-1.6 6 0 1.6 1.6 0 6-1.6 1.6-6 0-1.6-1.6Z"/><path transform="translate(350 50) scale(1.1)" opacity="0.85" d="M0-6L1.6-1.6 6 0 1.6 1.6 0 6-1.6 1.6-6 0-1.6-1.6Z"/><path transform="translate(374 122) scale(0.8)" opacity="0.85" d="M0-6L1.6-1.6 6 0 1.6 1.6 0 6-1.6 1.6-6 0-1.6-1.6Z"/><path transform="translate(16 112) scale(0.9)" opacity="0.85" d="M0-6L1.6-1.6 6 0 1.6 1.6 0 6-1.6 1.6-6 0-1.6-1.6Z"/><path transform="translate(330 22) scale(0.7)" opacity="0.85" d="M0-6L1.6-1.6 6 0 1.6 1.6 0 6-1.6 1.6-6 0-1.6-1.6Z"/><rect x="60" y="14" width="12" height="5" rx="1.5" opacity=".8" transform="rotate(25 60 14)"/><rect x="160" y="36" width="12" height="5" rx="1.5" opacity=".8" transform="rotate(-30 160 36)"/><rect x="212" y="8" width="12" height="5" rx="1.5" opacity=".8" transform="rotate(40 212 8)"/><rect x="298" y="42" width="12" height="5" rx="1.5" opacity=".8" transform="rotate(-20 298 42)"/><rect x="22" y="70" width="12" height="5" rx="1.5" opacity=".8" transform="rotate(35 22 70)"/><rect x="364" y="88" width="12" height="5" rx="1.5" opacity=".8" transform="rotate(-40 364 88)"/><rect x="128" y="52" width="12" height="5" rx="1.5" opacity=".8" transform="rotate(15 128 52)"/><rect x="278" y="10" width="12" height="5" rx="1.5" opacity=".8" transform="rotate(-35 278 10)"/><circle cx="90" cy="30" r="2" opacity=".85"/><circle cx="200" cy="44" r="2" opacity=".85"/><circle cx="262" cy="58" r="2" opacity=".85"/><circle cx="340" cy="72" r="2.5" opacity=".85"/><circle cx="10" cy="42" r="2" opacity=".85"/><circle cx="380" cy="22" r="2" opacity=".85"/><circle cx="150" cy="14" r="2.5" opacity=".85"/><circle cx="44" cy="92" r="2.5" opacity=".85"/></g>
+      <!-- cadeau links, met kerstmuts -->
+      <rect x="38" y="120" width="80" height="80" rx="5" fill="#dcecfb"/>
+      <path d="M98 120H113a5 5 0 0 1 5 5V195a5 5 0 0 1-5 5H98Z" fill="#c2dcf5"/>
+      <rect x="32" y="102" width="92" height="22" rx="5" fill="#fff"/>
+      <path d="M32 116H124V119a5 5 0 0 1-5 5H37a5 5 0 0 1-5-5Z" fill="#e1edfa"/>
+      <rect x="68" y="102" width="20" height="98" fill="#2671b5"/>
+      <rect x="68" y="102" width="6" height="98" fill="#3d8bd9"/>
+      <g>
+      <rect x="48" y="90" width="64" height="16" rx="8" fill="#fff"/>
+      <path d="M54 94C56 66 72 46 98 42C108 40 116 42 122 50C114 48 106 52 104 60C100 72 104 84 110 94Z" fill="#dc3035"/>
+      <path d="M62 90C64 72 74 58 88 51" stroke="#f0656a" stroke-width="4" fill="none" stroke-linecap="round"/>
+      <circle cx="123" cy="50" r="9" fill="#fff"/>
+      </g>
+      <!-- groot cadeau in het midden, met label -->
+      <rect x="146" y="88" width="96" height="112" rx="6" fill="#dc3035"/>
+      <path d="M214 88H236a6 6 0 0 1 6 6V194a6 6 0 0 1-6 6H214Z" fill="#b9262c"/>
+      <rect x="140" y="64" width="108" height="28" rx="6" fill="#ee4a4f"/>
+      <path d="M140 84H248V86a6 6 0 0 1-6 6H146a6 6 0 0 1-6-6Z" fill="#d93b41"/>
+      <rect x="184" y="64" width="20" height="136" fill="#f9a948"/>
+      <rect x="184" y="64" width="6" height="136" fill="#fbc06a"/>
+      <path d="M194 64C174 60 158 38 172 30C186 24 194 48 194 64Z" fill="#f9a948"/>
+      <path d="M194 64C214 60 230 38 216 30C202 24 194 48 194 64Z" fill="#f9a948"/>
+      <path d="M194 64C178 58 168 42 176 36" stroke="#e8912c" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <path d="M194 64C210 58 220 42 212 36" stroke="#e8912c" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <circle cx="194" cy="64" r="7" fill="#e8912c"/>
+      <path d="M198 68C214 78 222 98 224 117" stroke="#fbc06a" stroke-width="2" fill="none" stroke-linecap="round"/>
+      <g transform="rotate(10 222 134)">
+        <rect x="205" y="110" width="36" height="48" rx="7" fill="#fff"/>
+        <circle cx="223" cy="119" r="3.2" fill="#c9d9ea"/>
+        <text x="223" y="150" text-anchor="middle" font-size="28" font-weight="700" fill="#dc3035" font-family="'Alfa Slab One', Georgia, serif">?</text>
+      </g>
+      <!-- cadeau rechts -->
+      <rect x="270" y="112" width="78" height="88" rx="5" fill="#ffcf3d"/>
+      <path d="M326 112H343a5 5 0 0 1 5 5V195a5 5 0 0 1-5 5H326Z" fill="#f0b81f"/>
+      <rect x="264" y="94" width="90" height="22" rx="5" fill="#ffdc63"/>
+      <path d="M264 108H354V111a5 5 0 0 1-5 5H269a5 5 0 0 1-5-5Z" fill="#f5c944"/>
+      <rect x="299" y="94" width="20" height="106" fill="#dc3035"/>
+      <rect x="299" y="94" width="6" height="106" fill="#ee4a4f"/>
+      <path d="M309 94C292 90 278 72 290 64C302 58 309 80 309 94Z" fill="#dc3035"/>
+      <path d="M309 94C326 90 340 72 328 64C316 58 309 80 309 94Z" fill="#dc3035"/>
+      <circle cx="309" cy="94" r="6" fill="#b9262c"/>
+    </svg>
+    <svg class="snow" viewBox="0 0 1440 60" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+      <path d="M0 22C260 4 520 16 760 24S1200 30 1440 12V60H0Z" fill="#dbe9f7"/>
+      <path d="M0 38C320 22 640 46 940 32S1300 20 1440 34V60H0Z" fill="#fff"/>
+    </svg>
+  </div>
+</header>
 <div class="wrap">
-  <header>
-    <h1>Alle <span>verlanglijstjes</span></h1>
-    <p class="lead">Hier vind je wat iedereen graag zou krijgen.</p>
-  </header>
+  <p class="intro">Hier vind je wat iedereen graag zou krijgen.</p>
 
   <div class="tools">
     <input id="q" type="search" placeholder="Zoek op naam" aria-label="Zoek op naam">
-    <button id="refresh" type="button">Vernieuwen</button>
+    <button id="refresh" class="ghost" type="button">Vernieuwen</button>
     <a class="btn primary" href="verlanglijstje.html">Mijn lijstje invullen</a>
   </div>
   <p class="count" id="count" aria-live="polite"></p>
@@ -128,6 +218,12 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline: 3px solid 
       var card = document.createElement("article");
       card.className = "person";
       var h = document.createElement("h2"); h.textContent = r.name; card.appendChild(h);
+      var cnt = (r.items || []).length;
+      var band = document.createElement("div"); band.className = "band blue";
+      var s1 = document.createElement("span"); s1.textContent = cnt + (cnt === 1 ? " wens" : " wensen");
+      var s2 = document.createElement("span");
+      try { if (r.updated_at) s2.textContent = new Date(r.updated_at).toLocaleDateString("nl-BE", { day: "numeric", month: "short" }); } catch (e) {}
+      band.appendChild(s1); band.appendChild(s2); card.appendChild(band);
       var ol = document.createElement("ol");
       (r.items || []).slice(0, 5).forEach(function (t) {
         var li = document.createElement("li"); addText(li, t); ol.appendChild(li);
@@ -137,13 +233,6 @@ input:focus-visible, button:focus-visible, a:focus-visible { outline: 3px solid 
         var n = document.createElement("p"); n.className = "note";
         n.appendChild(document.createTextNode("Handig om te weten: "));
         addText(n, r.note); card.appendChild(n);
-      }
-      if (r.updated_at) {
-        var w = document.createElement("p"); w.className = "when";
-        try {
-          w.textContent = "Bijgewerkt op " + new Date(r.updated_at).toLocaleDateString("nl-BE", { day: "numeric", month: "long" });
-        } catch (e) {}
-        card.appendChild(w);
       }
       grid.appendChild(card);
     });
